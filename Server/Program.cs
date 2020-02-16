@@ -83,6 +83,8 @@ namespace Server
     {
         private void ProcessResponse()
         {
+            Response.Headers.Add("Access-Control-Allow-Origin: *");
+            Response.Headers.Add("Access-Control-Allow-Headers: *");
             Response.Headers.Add("Server: SharpFlashDetector");
             Response.Headers.Add("X-SimpleFramework: " + Framework.PROG_VERSION);
         }
