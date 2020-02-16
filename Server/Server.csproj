@@ -3,7 +3,18 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp3.1</TargetFramework>
+    <AssemblyName>Server</AssemblyName>
+    <ApplicationIcon>icon.ico</ApplicationIcon>
+    <Authors>PeratX</Authors>
+    <Company>iTX Technologies</Company>
+    <Copyright>Copyright (C) 2020 iTX Technologies</Copyright>
+    <PackageProjectUrl>https://github.com/iTXTech/SharpFlashDetector</PackageProjectUrl>
+    <SignAssembly>false</SignAssembly>
   </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="EmbedIO" Version="3.4.2" />
+  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="../Library/Library.msbuildproj" />
