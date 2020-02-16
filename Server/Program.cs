@@ -17,9 +17,13 @@
  */
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using CommandLine;
+using CommandLine.Text;
 using EmbedIO;
 using EmbedIO.Actions;
 using EmbedIO.Routing;
@@ -40,35 +44,54 @@ namespace Server
             return context;
         }
 
+        private class Options
+        {
+            [Option('a', "address", 
+                Default = "http://127.0.0.1:8080/", 
+                Required = false,
+                HelpText = "Server Address of SharpFlashDetector Server")]
+            public string Address { get; set; }
+
+
+            [Option('n', "disable-logging",
+                Required = false, HelpText = "Disable logging of embedIO.")]
+            public bool DisableLogging { get; set; }
+        }
+
         static void Main(string[] args)
         {
-            var addr = "http://127.0.0.1:8080/";
-            if (args.Length > 0)
-            {
-                addr = args[0];
-            }
+            var addr = "";
+            Parser.Default.ParseArguments<Options>(args)
+                .WithParsed(opts =>
+                {
+                    addr = opts.Address;
+                    if (opts.DisableLogging)
+                    {
+                        Logger.UnregisterLogger<ConsoleLogger>();
+                    }
+                })
+                .WithNotParsed(err => { Environment.Exit(0); });
 
             context = Context.CreateEmpty();
             PeachPieHelper.load(context);
-            Console.WriteLine("SharpFlashDetector Server " +
-                              System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString());
+            Console.WriteLine("SharpFlashDetector Server " + Assembly.GetEntryAssembly()?
+                                  .GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion);
             Console.WriteLine("Copyright (C) 2020 iTX Technologies");
             Console.WriteLine("https://github.com/iTXTech/SharpFlashDetector");
             Console.WriteLine();
             Console.WriteLine("iTXTech FlashDetector version: " + FlashDetector.getVersion(context));
             Console.WriteLine("Starting server on " + addr);
+            Console.WriteLine("Press Enter to exit.");
             Console.WriteLine();
 
-            //Logger.UnregisterLogger<ConsoleLogger>();
             using var server = CreateWebServer(addr);
             server.RunAsync();
-            Console.WriteLine("Press Enter to exit.");
             Console.ReadLine();
         }
 
-        private static WebServer CreateWebServer(string addr)
+        private static WebServer CreateWebServer(string address)
         {
-            var server = new WebServer(o => o.WithUrlPrefix(addr).WithMode(HttpListenerMode.EmbedIO))
+            var server = new WebServer(o => o.WithUrlPrefix(address).WithMode(HttpListenerMode.EmbedIO))
                 .WithLocalSessionManager()
                 .WithWebApi("/", m => m.WithController<Controller>())
                 .WithModule(new ActionModule("/", HttpVerbs.Any, ctx => ctx.SendDataAsync(new {Message = "Error"})));
