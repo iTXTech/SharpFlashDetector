@@ -1,4 +1,7 @@
 **/obj
 **/bin
-*.php
+Library/**/*.php
+Library/sf
+Library/fd
 .vs
+.idea

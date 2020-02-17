@@ -5,11 +5,12 @@ VisualStudioVersion = 16.0.29728.190
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{13B669BE-BB05-4DDF-9536-439F39A36129}") = "Library", "Library\Library.msbuildproj", "{D06F06BD-4F64-493C-8A70-8602CC91E226}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Server", "Server\Server.csproj", "{A194DA60-B32F-426B-AC9A-77CF5409065A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Server", "Server\Server.csproj", "{A194DA60-B32F-426B-AC9A-77CF5409065A}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{A94F1EFD-4F59-4547-B14B-5815142C78AB}"
 	ProjectSection(SolutionItems) = preProject
 		.gitignore = .gitignore
+		build.php = build.php
 		README.md = README.md
 	EndProjectSection
 EndProject

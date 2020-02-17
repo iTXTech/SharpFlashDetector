@@ -10,7 +10,8 @@
     <Copyright>Copyright (C) 2020 iTX Technologies</Copyright>
     <PackageProjectUrl>https://github.com/iTXTech/SharpFlashDetector</PackageProjectUrl>
     <SignAssembly>false</SignAssembly>
-    <Version>1.0.0</Version>
+    <Version>1.0.0-3a0f83f</Version>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
   </PropertyGroup>
 
   <ItemGroup>
@@ -21,5 +22,9 @@
   <ItemGroup>
     <ProjectReference Include="../Library/Library.msbuildproj" />
   </ItemGroup>
+
+  <Target Name="UpdateVersion" BeforeTargets="CoreCompile">
+    <Exec Command="php &quot;$(SolutionDir)build.php&quot; $(SolutionDir) &quot;$(ProjectDir)Server.csproj&quot;" />
+  </Target>
 
 </Project>

@@ -17,7 +17,6 @@
  */
 
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -46,23 +45,31 @@ namespace Server
 
         private class Options
         {
-            [Option('a', "address", 
-                Default = "http://127.0.0.1:8080/", 
+            [Option('a', "address",
+                Default = "http://127.0.0.1:8080/",
                 Required = false,
                 HelpText = "Server Address of SharpFlashDetector Server")]
             public string Address { get; set; }
 
 
             [Option('n', "disable-logging",
-                Required = false, HelpText = "Disable logging of embedIO.")]
+                Required = false, HelpText = "Disable logging of EmbedIO.")]
             public bool DisableLogging { get; set; }
+        }
+
+        private static void PrintHeader()
+        {
+            Console.WriteLine("SharpFlashDetector Server " + Assembly.GetEntryAssembly()?
+                                  .GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion);
+            Console.WriteLine("Copyright (C) 2020 iTX Technologies\nhttps://github.com/iTXTech/SharpFlashDetector");
         }
 
         static void Main(string[] args)
         {
+            PrintHeader();
             var addr = "";
-            Parser.Default.ParseArguments<Options>(args)
-                .WithParsed(opts =>
+            var result = new Parser(with => with.HelpWriter = null).ParseArguments<Options>(args);
+            result.WithParsed(opts =>
                 {
                     addr = opts.Address;
                     if (opts.DisableLogging)
@@ -70,14 +77,24 @@ namespace Server
                         Logger.UnregisterLogger<ConsoleLogger>();
                     }
                 })
-                .WithNotParsed(err => { Environment.Exit(0); });
+                .WithNotParsed(err =>
+                {
+                    if (err.IsHelp())
+                    {
+                        Console.WriteLine(HelpText.AutoBuild(result, h =>
+                        {
+                            h.AdditionalNewLineAfterOption = false;
+                            h.Heading = "";
+                            h.Copyright = "";
+                            return HelpText.DefaultParsingErrorsHandler(result, h);
+                        }, e => e));
+                    }
+
+                    Environment.Exit(0);
+                });
 
             context = Context.CreateEmpty();
             PeachPieHelper.load(context);
-            Console.WriteLine("SharpFlashDetector Server " + Assembly.GetEntryAssembly()?
-                                  .GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion);
-            Console.WriteLine("Copyright (C) 2020 iTX Technologies");
-            Console.WriteLine("https://github.com/iTXTech/SharpFlashDetector");
             Console.WriteLine();
             Console.WriteLine("iTXTech FlashDetector version: " + FlashDetector.getVersion(context));
             Console.WriteLine("Starting server on " + addr);
@@ -119,14 +136,15 @@ namespace Server
 
         private string GetQuery()
         {
-            return string.Join("&", Request.QueryString.AllKeys.Select(key => key + "=" + Request.QueryString[key]).ToArray());
+            return string.Join("&",
+                Request.QueryString.AllKeys.Select(key => key + "=" + Request.QueryString[key]).ToArray());
         }
 
         [Route(HttpVerbs.Get, "/")]
         public async Task Index()
         {
             ProcessResponse();
-            await HttpContext.SendStringAsync(PeachPieHelper.index(Program.GetContext(), GetQuery(), GetRemote()), 
+            await HttpContext.SendStringAsync(PeachPieHelper.index(Program.GetContext(), GetQuery(), GetRemote()),
                 "application/json; charset=utf-8", Encoding.UTF8);
         }
 
@@ -134,7 +152,7 @@ namespace Server
         public async Task Info()
         {
             ProcessResponse();
-            await HttpContext.SendStringAsync(PeachPieHelper.info(Program.GetContext(), GetQuery(), GetRemote()), 
+            await HttpContext.SendStringAsync(PeachPieHelper.info(Program.GetContext(), GetQuery(), GetRemote()),
                 "application/json; charset=utf-8", Encoding.UTF8);
         }
 
@@ -150,7 +168,8 @@ namespace Server
         public async Task Decode([QueryField] string pn, [QueryField] int trans)
         {
             ProcessResponse();
-            await HttpContext.SendStringAsync(PeachPieHelper.decode(Program.GetContext(), GetQuery(), GetRemote(), trans != 0, pn),
+            await HttpContext.SendStringAsync(
+                PeachPieHelper.decode(Program.GetContext(), GetQuery(), GetRemote(), trans != 0, pn),
                 "application/json; charset=utf-8", Encoding.UTF8);
         }
 
@@ -158,7 +177,8 @@ namespace Server
         public async Task SearchId([QueryField] string id, [QueryField] int trans)
         {
             ProcessResponse();
-            await HttpContext.SendStringAsync(PeachPieHelper.searchId(Program.GetContext(), GetQuery(), GetRemote(), trans != 0, id),
+            await HttpContext.SendStringAsync(
+                PeachPieHelper.searchId(Program.GetContext(), GetQuery(), GetRemote(), trans != 0, id),
                 "application/json; charset=utf-8", Encoding.UTF8);
         }
 
@@ -166,7 +186,8 @@ namespace Server
         public async Task SearchPn([QueryField] string pn, [QueryField] int trans)
         {
             ProcessResponse();
-            await HttpContext.SendStringAsync(PeachPieHelper.searchPn(Program.GetContext(), GetQuery(), GetRemote(), trans != 0, pn),
+            await HttpContext.SendStringAsync(
+                PeachPieHelper.searchPn(Program.GetContext(), GetQuery(), GetRemote(), trans != 0, pn),
                 "application/json; charset=utf-8", Encoding.UTF8);
         }
     }
