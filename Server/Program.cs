@@ -24,7 +24,6 @@ using System.Threading.Tasks;
 using CommandLine;
 using CommandLine.Text;
 using EmbedIO;
-using EmbedIO.Actions;
 using EmbedIO.Routing;
 using EmbedIO.WebApi;
 using iTXTech.FlashDetector;
@@ -111,9 +110,14 @@ namespace Server
             var server = new WebServer(o => o.WithUrlPrefix(address).WithMode(HttpListenerMode.EmbedIO))
                 .WithLocalSessionManager()
                 .WithWebApi("/", m => m.WithController<Controller>())
-                .WithModule(new ActionModule("/", HttpVerbs.Any, ctx => ctx.SendDataAsync(new {Message = "Error"})));
-
-            server.StateChanged += (s, e) => $"WebServer New State - {e.NewState}".Info();
+                .HandleHttpException(async (ctx, ex) =>
+                {
+                    ctx.Response.StatusCode = ex.StatusCode;
+                    await ctx.SendStringAsync(
+                        "Powered by <a href=\"https://github.com/iTXTech/SharpFlashDetector\">SharpFlashDetector Server</a></br>" +
+                        ex.StatusCode + " " + ctx.Response.StatusDescription,
+                        "text/html", Encoding.UTF8);
+                });
 
             return server;
         }
@@ -131,7 +135,7 @@ namespace Server
 
         private string GetRemote()
         {
-            return Request.RemoteEndPoint.ToString();
+            return Request.Headers.Get("X-Real-IP") ?? Request.RemoteEndPoint.ToString();
         }
 
         private string GetQuery()
