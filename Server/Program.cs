@@ -95,7 +95,7 @@ namespace Server
             context = Context.CreateEmpty();
             PeachPieHelper.load(context);
             Console.WriteLine();
-            Console.WriteLine("iTXTech FlashDetector version: " + FlashDetector.getVersion(context));
+            Console.WriteLine("iTXTech FlashDetector version: " + Loader.getInstance(context).getInfo().getVersion());
             Console.WriteLine("Starting server on " + addr);
             Console.WriteLine("Press Enter to exit.");
             Console.WriteLine();
