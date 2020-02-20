@@ -27,6 +27,7 @@ using EmbedIO;
 using EmbedIO.Routing;
 using EmbedIO.WebApi;
 using iTXTech.FlashDetector;
+using iTXTech.FlashDetector.Processor;
 using iTXTech.SimpleFramework;
 using Pchp.Core;
 using Swan.Logging;
@@ -66,11 +67,11 @@ namespace Server
         static void Main(string[] args)
         {
             PrintHeader();
-            var addr = "";
+            var address = "";
             var result = new Parser(with => with.HelpWriter = null).ParseArguments<Options>(args);
             result.WithParsed(opts =>
                 {
-                    addr = opts.Address;
+                    address = opts.Address;
                     if (opts.DisableLogging)
                     {
                         Logger.UnregisterLogger<ConsoleLogger>();
@@ -94,13 +95,14 @@ namespace Server
 
             context = Context.CreateEmpty();
             PeachPieHelper.load(context);
+            FlashDetector.registerProcessor(context, new SharpProcessor(context));
             Console.WriteLine();
             Console.WriteLine("iTXTech FlashDetector version: " + Loader.getInstance(context).getInfo().getVersion());
-            Console.WriteLine("Starting server on " + addr);
+            Console.WriteLine("Starting server on " + address);
             Console.WriteLine("Press Enter to exit.");
             Console.WriteLine();
 
-            using var server = CreateWebServer(addr);
+            using var server = CreateWebServer(address);
             server.RunAsync();
             Console.ReadLine();
         }
@@ -123,7 +125,20 @@ namespace Server
         }
     }
 
-    internal sealed class Controller : WebApiController
+    internal class SharpProcessor : Processor
+    {
+        public SharpProcessor(Context ctx) : base(ctx)
+        {
+        }
+
+        public override bool index(string query, string remote, string name, PhpAlias c)
+        {
+            c.Value.Array.Add("server", "SharpFlashDetector Server");
+            return true;
+        }
+    }
+
+    internal class Controller : WebApiController
     {
         private void ProcessResponse()
         {

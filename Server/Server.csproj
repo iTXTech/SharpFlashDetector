@@ -10,7 +10,7 @@
     <Copyright>Copyright (C) 2020 iTX Technologies</Copyright>
     <PackageProjectUrl>https://github.com/iTXTech/SharpFlashDetector</PackageProjectUrl>
     <SignAssembly>false</SignAssembly>
-    <Version>1.0.0-2ece2f7</Version>
+    <Version>1.0.0-ea4190a</Version>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
   </PropertyGroup>
 
