@@ -48,13 +48,13 @@ namespace Server
             [Option('a', "address",
                 Default = "http://127.0.0.1:8080/",
                 Required = false,
-                HelpText = "Server Address of SharpFlashDetector Server")]
+                HelpText = "Set Server Address of SharpFlashDetector Server.")]
             public string Address { get; set; }
 
 
-            [Option('n', "disable-logging",
-                Required = false, HelpText = "Disable logging of EmbedIO.")]
-            public bool DisableLogging { get; set; }
+            [Option('v', "verbose",
+                Required = false, HelpText = "Enable verbose mode.")]
+            public bool Verbose { get; set; }
         }
 
         private static void PrintHeader()
@@ -72,7 +72,7 @@ namespace Server
             result.WithParsed(opts =>
                 {
                     address = opts.Address;
-                    if (opts.DisableLogging)
+                    if (!opts.Verbose)
                     {
                         Logger.UnregisterLogger<ConsoleLogger>();
                     }
