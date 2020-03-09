@@ -13,3 +13,5 @@ xcopy /y /e FlashDetector ..\..\FlashDetector\
 copy fd.php ..\..\
 cd ..\..
 rd /s /q fd
+echo Done!
+
