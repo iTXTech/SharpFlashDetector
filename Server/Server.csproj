@@ -10,13 +10,13 @@
     <Copyright>Copyright (C) 2020 iTX Technologies</Copyright>
     <PackageProjectUrl>https://github.com/iTXTech/SharpFlashDetector</PackageProjectUrl>
     <SignAssembly>false</SignAssembly>
-    <Version>1.0.0-7dbeaac</Version>
+    <Version>1.0.0-35cd528</Version>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="CommandLineParser" Version="2.7.82" />
-    <PackageReference Include="EmbedIO" Version="3.4.2" />
+    <PackageReference Include="EmbedIO" Version="3.4.3" />
   </ItemGroup>
 
   <ItemGroup>

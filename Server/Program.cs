@@ -60,7 +60,7 @@ namespace Server
         private static void PrintHeader()
         {
             Console.WriteLine("SharpFlashDetector Server " + Assembly.GetEntryAssembly()?
-                                  .GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion);
+                .GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion);
             Console.WriteLine("Copyright (C) 2020 iTX Technologies\nhttps://github.com/iTXTech/SharpFlashDetector");
         }
 
@@ -140,6 +140,8 @@ namespace Server
 
     internal class Controller : WebApiController
     {
+        private const string CONTENT_TYPE = "application/json; charset=utf-8";
+
         private void ProcessResponse()
         {
             Response.Headers.Add("Access-Control-Allow-Origin: *");
@@ -164,7 +166,7 @@ namespace Server
         {
             ProcessResponse();
             await HttpContext.SendStringAsync(PeachPieHelper.index(Program.GetContext(), GetQuery(), GetRemote()),
-                "application/json; charset=utf-8", Encoding.UTF8);
+                CONTENT_TYPE, Encoding.UTF8);
         }
 
         [Route(HttpVerbs.Get, "/info")]
@@ -172,42 +174,43 @@ namespace Server
         {
             ProcessResponse();
             await HttpContext.SendStringAsync(PeachPieHelper.info(Program.GetContext(), GetQuery(), GetRemote()),
-                "application/json; charset=utf-8", Encoding.UTF8);
+                CONTENT_TYPE, Encoding.UTF8);
         }
 
         [Route(HttpVerbs.Get, "/summary")]
-        public async Task Summary([QueryField] string pn)
+        public async Task Summary([QueryField] string lang, [QueryField] string pn)
         {
             ProcessResponse();
-            await HttpContext.SendStringAsync(PeachPieHelper.summary(Program.GetContext(), GetQuery(), GetRemote(), pn),
-                "application/json; charset=utf-8", Encoding.UTF8);
+            await HttpContext.SendStringAsync(
+                PeachPieHelper.summary(Program.GetContext(), GetQuery(), GetRemote(), lang, pn),
+                CONTENT_TYPE, Encoding.UTF8);
         }
 
         [Route(HttpVerbs.Get, "/decode")]
-        public async Task Decode([QueryField] string pn, [QueryField] int trans)
+        public async Task Decode([QueryField] string lang, [QueryField] string pn)
         {
             ProcessResponse();
             await HttpContext.SendStringAsync(
-                PeachPieHelper.decode(Program.GetContext(), GetQuery(), GetRemote(), trans != 0, pn),
-                "application/json; charset=utf-8", Encoding.UTF8);
+                PeachPieHelper.decode(Program.GetContext(), GetQuery(), GetRemote(), lang, pn),
+                CONTENT_TYPE, Encoding.UTF8);
         }
 
         [Route(HttpVerbs.Get, "/searchId")]
-        public async Task SearchId([QueryField] string id, [QueryField] int trans)
+        public async Task SearchId([QueryField] string lang, [QueryField] string id)
         {
             ProcessResponse();
             await HttpContext.SendStringAsync(
-                PeachPieHelper.searchId(Program.GetContext(), GetQuery(), GetRemote(), trans != 0, id),
-                "application/json; charset=utf-8", Encoding.UTF8);
+                PeachPieHelper.searchId(Program.GetContext(), GetQuery(), GetRemote(), lang, id),
+                CONTENT_TYPE, Encoding.UTF8);
         }
 
         [Route(HttpVerbs.Get, "/searchPn")]
-        public async Task SearchPn([QueryField] string pn, [QueryField] int trans)
+        public async Task SearchPn([QueryField] string lang, [QueryField] string pn)
         {
             ProcessResponse();
             await HttpContext.SendStringAsync(
-                PeachPieHelper.searchPn(Program.GetContext(), GetQuery(), GetRemote(), trans != 0, pn),
-                "application/json; charset=utf-8", Encoding.UTF8);
+                PeachPieHelper.searchPn(Program.GetContext(), GetQuery(), GetRemote(), lang, pn),
+                CONTENT_TYPE, Encoding.UTF8);
         }
     }
 }
