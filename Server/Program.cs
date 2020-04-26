@@ -48,23 +48,23 @@ namespace Server
             [Option('a', "address",
                 Default = "http://127.0.0.1:8080/",
                 Required = false,
-                HelpText = "Set Server Address of SharpFlashDetector Server.")]
+                HelpText = "Set Server Address.")]
             public string Address { get; set; }
 
 
             [Option('v', "verbose",
-                Required = false, HelpText = "Enable verbose mode.")]
+                Required = false, HelpText = "Disable verbose mode.")]
             public bool Verbose { get; set; }
         }
 
         private static void PrintHeader()
         {
             Console.WriteLine("SharpFlashDetector Server " + Assembly.GetEntryAssembly()?
-                .GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion);
+                .GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion);
             Console.WriteLine("Copyright (C) 2020 iTX Technologies\nhttps://github.com/iTXTech/SharpFlashDetector");
         }
 
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
             PrintHeader();
             var address = "";
@@ -72,7 +72,7 @@ namespace Server
             result.WithParsed(opts =>
                 {
                     address = opts.Address;
-                    if (!opts.Verbose)
+                    if (opts.Verbose)
                     {
                         Logger.UnregisterLogger<ConsoleLogger>();
                     }
