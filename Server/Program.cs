@@ -17,18 +17,13 @@
  */
 
 using System;
-using System.Linq;
 using System.Reflection;
 using System.Text;
-using System.Threading.Tasks;
 using CommandLine;
 using CommandLine.Text;
 using EmbedIO;
-using EmbedIO.Routing;
 using EmbedIO.WebApi;
 using iTXTech.FlashDetector;
-using iTXTech.FlashDetector.Processor;
-using iTXTech.SimpleFramework;
 using Pchp.Core;
 using Swan.Logging;
 
@@ -36,11 +31,11 @@ namespace Server
 {
     class Program
     {
-        private static Context context;
+        private static readonly Context Context = Context.CreateEmpty();
 
         public static Context GetContext()
         {
-            return context;
+            return Context;
         }
 
         private class Options
@@ -93,11 +88,10 @@ namespace Server
                     Environment.Exit(0);
                 });
 
-            context = Context.CreateEmpty();
-            PeachPieHelper.load(context);
-            FlashDetector.registerProcessor(context, new SharpProcessor(context));
+            PeachPieHelper.load(Context);
+            FlashDetector.registerProcessor(Context, new SharpProcessor(Context));
             Console.WriteLine();
-            Console.WriteLine("iTXTech FlashDetector version: " + Loader.getInstance(context).getInfo().getVersion());
+            Console.WriteLine("iTXTech FlashDetector version: " + Loader.getInstance(Context).getInfo().getVersion());
             Console.WriteLine("Starting server on " + address);
             Console.WriteLine("Press Enter to exit.");
             Console.WriteLine();
@@ -123,95 +117,6 @@ namespace Server
                 });
 
             return server;
-        }
-    }
-
-    internal class SharpProcessor : Processor
-    {
-        public SharpProcessor(Context ctx) : base(ctx)
-        {
-        }
-
-        public override bool index(string query, string remote, string name, PhpAlias c)
-        {
-            c.Value.Array.Add("server", "SharpFlashDetector Server");
-            return true;
-        }
-    }
-
-    internal class Controller : WebApiController
-    {
-        private const string CONTENT_TYPE = "application/json; charset=utf-8";
-
-        private void ProcessResponse()
-        {
-            Response.Headers.Add("Access-Control-Allow-Origin: *");
-            Response.Headers.Add("Access-Control-Allow-Headers: *");
-            Response.Headers.Add("Server: SharpFlashDetector");
-            Response.Headers.Add("X-SimpleFramework: " + Framework.PROG_VERSION);
-        }
-
-        private string GetRemote()
-        {
-            return Request.Headers.Get("X-Real-IP") ?? Request.RemoteEndPoint.ToString();
-        }
-
-        private string GetQuery()
-        {
-            return string.Join("&",
-                Request.QueryString.AllKeys.Select(key => key + "=" + Request.QueryString[key]).ToArray());
-        }
-
-        [Route(HttpVerbs.Get, "/")]
-        public async Task Index()
-        {
-            ProcessResponse();
-            await HttpContext.SendStringAsync(PeachPieHelper.index(Program.GetContext(), GetQuery(), GetRemote()),
-                CONTENT_TYPE, Encoding.UTF8);
-        }
-
-        [Route(HttpVerbs.Get, "/info")]
-        public async Task Info()
-        {
-            ProcessResponse();
-            await HttpContext.SendStringAsync(PeachPieHelper.info(Program.GetContext(), GetQuery(), GetRemote()),
-                CONTENT_TYPE, Encoding.UTF8);
-        }
-
-        [Route(HttpVerbs.Get, "/summary")]
-        public async Task Summary([QueryField] string lang, [QueryField] string pn)
-        {
-            ProcessResponse();
-            await HttpContext.SendStringAsync(
-                PeachPieHelper.summary(Program.GetContext(), GetQuery(), GetRemote(), lang, pn),
-                CONTENT_TYPE, Encoding.UTF8);
-        }
-
-        [Route(HttpVerbs.Get, "/decode")]
-        public async Task Decode([QueryField] string lang, [QueryField] string pn)
-        {
-            ProcessResponse();
-            await HttpContext.SendStringAsync(
-                PeachPieHelper.decode(Program.GetContext(), GetQuery(), GetRemote(), lang, pn),
-                CONTENT_TYPE, Encoding.UTF8);
-        }
-
-        [Route(HttpVerbs.Get, "/searchId")]
-        public async Task SearchId([QueryField] string lang, [QueryField] string id)
-        {
-            ProcessResponse();
-            await HttpContext.SendStringAsync(
-                PeachPieHelper.searchId(Program.GetContext(), GetQuery(), GetRemote(), lang, id),
-                CONTENT_TYPE, Encoding.UTF8);
-        }
-
-        [Route(HttpVerbs.Get, "/searchPn")]
-        public async Task SearchPn([QueryField] string lang, [QueryField] string pn)
-        {
-            ProcessResponse();
-            await HttpContext.SendStringAsync(
-                PeachPieHelper.searchPn(Program.GetContext(), GetQuery(), GetRemote(), lang, pn),
-                CONTENT_TYPE, Encoding.UTF8);
         }
     }
 }
