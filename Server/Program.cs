@@ -117,6 +117,7 @@ namespace Server
                     ctx.Response.StatusCode = ex.StatusCode;
                     await ctx.SendStringAsync(
                         "Powered by <a href=\"https://github.com/iTXTech/SharpFlashDetector\">SharpFlashDetector Server</a></br>" +
+                        "by <a href=\"mailto:peratx@itxtech.org\">PeratX@iTXTech.org</a></br>" +
                         ex.StatusCode + " " + ctx.Response.StatusDescription,
                         "text/html", Encoding.UTF8);
                 });

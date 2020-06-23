@@ -14,6 +14,13 @@ The `SharpFlashDetector Server` uses [EmbedIO](https://github.com/unosquare/embe
 
 Execute `dotnet publish -c release -r win-x64 /p:PublishSingleFile=true` to build single executable file.
 
+## Build
+
+### Requirements:
+
+* [.NET Core 3.1+](https://dotnet.microsoft.com/download/dotnet-core)
+* [PHP 7.2+](https://www.php.net)
+
 ## License
 
     Copyright (C) 2020 iTX Technologies
