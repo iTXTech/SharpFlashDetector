@@ -82,9 +82,9 @@ namespace Server
         }
 
         [Route(HttpVerbs.Get, "/searchPn")]
-        public async Task SearchPn([QueryField] string lang, [QueryField] string pn)
+        public async Task SearchPn([QueryField] string lang, [QueryField] string pn, [QueryField] int limit)
         {
-            await SendResponse(PeachPieHelper.searchPn(Program.GetContext(), GetQuery(), GetRemote(), lang, pn));
+            await SendResponse(PeachPieHelper.searchPn(Program.GetContext(), GetQuery(), GetRemote(), lang, pn, limit));
         }
     }
 }
