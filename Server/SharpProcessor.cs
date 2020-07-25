@@ -27,7 +27,7 @@ namespace Server
         {
         }
 
-        public override bool index(string query, string remote, string name, PhpAlias c)
+        public override bool index(string query, string remote, string ua, string name, PhpAlias c)
         {
             c.Value.Array.Add("server", "SharpFlashDetector Server");
             return true;

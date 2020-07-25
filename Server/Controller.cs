@@ -51,40 +51,49 @@ namespace Server
                 Request.QueryString.AllKeys.Select(key => key + "=" + Request.QueryString[key]).ToArray());
         }
 
+        private string GetUserAgent()
+        {
+            return Request.Headers.Get("User-Agent") ?? "Undefined";
+        }
+
         [Route(HttpVerbs.Get, "/")]
         public async Task Index()
         {
-            await SendResponse(PeachPieHelper.index(Program.GetContext(), GetQuery(), GetRemote()));
+            await SendResponse(PeachPieHelper.index(Program.GetContext(), GetQuery(), GetRemote(), GetUserAgent()));
         }
 
         [Route(HttpVerbs.Get, "/info")]
         public async Task Info()
         {
-            await SendResponse(PeachPieHelper.info(Program.GetContext(), GetQuery(), GetRemote()));
+            await SendResponse(PeachPieHelper.info(Program.GetContext(), GetQuery(), GetRemote(), GetUserAgent()));
         }
 
         [Route(HttpVerbs.Get, "/summary")]
         public async Task Summary([QueryField] string lang, [QueryField] string pn)
         {
-            await SendResponse(PeachPieHelper.summary(Program.GetContext(), GetQuery(), GetRemote(), lang, pn));
+            await SendResponse(PeachPieHelper.summary(Program.GetContext(), GetQuery(), GetRemote(), GetUserAgent(),
+                lang, pn));
         }
 
         [Route(HttpVerbs.Get, "/decode")]
         public async Task Decode([QueryField] string lang, [QueryField] string pn)
         {
-            await SendResponse(PeachPieHelper.decode(Program.GetContext(), GetQuery(), GetRemote(), lang, pn));
+            await SendResponse(PeachPieHelper.decode(Program.GetContext(), GetQuery(), GetRemote(), GetUserAgent(),
+                lang, pn));
         }
 
         [Route(HttpVerbs.Get, "/searchId")]
         public async Task SearchId([QueryField] string lang, [QueryField] string id)
         {
-            await SendResponse(PeachPieHelper.searchId(Program.GetContext(), GetQuery(), GetRemote(), lang, id));
+            await SendResponse(PeachPieHelper.searchId(Program.GetContext(), GetQuery(), GetRemote(), GetUserAgent(),
+                lang, id));
         }
 
         [Route(HttpVerbs.Get, "/searchPn")]
         public async Task SearchPn([QueryField] string lang, [QueryField] string pn, [QueryField] int limit)
         {
-            await SendResponse(PeachPieHelper.searchPn(Program.GetContext(), GetQuery(), GetRemote(), lang, pn, limit));
+            await SendResponse(PeachPieHelper.searchPn(Program.GetContext(), GetQuery(), GetRemote(), GetUserAgent(),
+                lang, pn, limit));
         }
     }
 }
