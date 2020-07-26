@@ -47,13 +47,12 @@ namespace Server
 
         private string GetQuery()
         {
-            return string.Join("&",
-                Request.QueryString.AllKeys.Select(key => key + "=" + Request.QueryString[key]).ToArray());
+            return Request.Url.ToString();
         }
 
         private string GetUserAgent()
         {
-            return Request.Headers.Get("User-Agent") ?? "Undefined";
+            return Request.UserAgent;
         }
 
         [Route(HttpVerbs.Get, "/")]
