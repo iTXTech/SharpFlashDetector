@@ -2,15 +2,15 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net5.0</TargetFramework>
     <AssemblyName>SharpFlashDetector Server</AssemblyName>
     <ApplicationIcon>icon.ico</ApplicationIcon>
     <Authors>PeratX</Authors>
     <Company>iTX Technologies</Company>
-    <Copyright>Copyright (C) 2020 iTX Technologies</Copyright>
+    <Copyright>Copyright (C) 2020-2021 iTX Technologies</Copyright>
     <PackageProjectUrl>https://github.com/iTXTech/SharpFlashDetector</PackageProjectUrl>
     <SignAssembly>false</SignAssembly>
-    <Version>1.0.0-e0b35c4</Version>
+    <Version>1.0.0-c2b3ee6</Version>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
   </PropertyGroup>
 
