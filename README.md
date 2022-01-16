@@ -1,16 +1,18 @@
 # iTXTech SharpFlashDetector
 
-Integrate `iTXTech FlashDetector` into `.NET` projects.
+Integrate `iTXTech FlashDetector` into `.NET` projects easily.
+
+Includes `iTXTech FlashDetector .NET SDK` and `iTXTech SharpFlashDetector Server`.
 
 ## Library
 
-The `SharpFlashDetector Library` shows how to integrate `FlashDetector` into a `.NET` project.
+The `iTXTech FlashDetector .NET SDK` shows how to integrate `FlashDetector` into a `.NET` project.
 
 Execute `setup.bat` to fetch necessary files.
 
 ## Server
 
-The `SharpFlashDetector Server` uses [EmbedIO](https://github.com/unosquare/embedio) to wrap `SharpFlashDetector Library` into a high performance web server.
+The `SharpFlashDetector Server` uses [EmbedIO](https://github.com/unosquare/embedio) to wrap `iTXTech FlashDetector .NET SDK` into a high performance web server.
 
 ### Generate `ReadyToRun` Single Executable for Windows AMD64
 
@@ -24,7 +26,7 @@ The `SharpFlashDetector Server` uses [EmbedIO](https://github.com/unosquare/embe
 
 ### Requirements:
 
-* [.NET 5](https://dotnet.microsoft.com/download/dotnet)
+* [.NET 6](https://dotnet.microsoft.com/download/dotnet)
 * [PHP 7.3+](https://www.php.net)
 
 ## License
