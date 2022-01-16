@@ -1,9 +1,12 @@
 ﻿<Project Sdk="Peachpie.NET.Sdk/1.0.0">
   <PropertyGroup>
     <OutputType>library</OutputType>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="**/*.php" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Update="Peachpie.App" Version="1.0.0" />
   </ItemGroup>
 </Project>

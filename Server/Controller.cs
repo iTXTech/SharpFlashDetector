@@ -1,7 +1,7 @@
 ﻿/*
  * iTXTech SharpFlashDetector
  *
- * Copyright (C) 2020-2021 iTX Technologies
+ * Copyright (C) 2020-2022 iTX Technologies
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -75,11 +75,25 @@ namespace Server
                 lang, pn));
         }
 
+        [Route(HttpVerbs.Get, "/summaryId")]
+        public async Task SummaryId([QueryField] string lang, [QueryField] string id)
+        {
+            await SendResponse(PeachPieHelper.summaryId(Program.GetContext(), GetQuery(), GetRemote(), GetUserAgent(),
+                lang, id));
+        }
+
         [Route(HttpVerbs.Get, "/decode")]
         public async Task Decode([QueryField] string lang, [QueryField] string pn)
         {
             await SendResponse(PeachPieHelper.decode(Program.GetContext(), GetQuery(), GetRemote(), GetUserAgent(),
                 lang, pn));
+        }
+
+        [Route(HttpVerbs.Get, "/decodeId")]
+        public async Task DecodeId([QueryField] string lang, [QueryField] string id)
+        {
+            await SendResponse(PeachPieHelper.decodeId(Program.GetContext(), GetQuery(), GetRemote(), GetUserAgent(),
+                lang, id));
         }
 
         [Route(HttpVerbs.Get, "/searchId")]

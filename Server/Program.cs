@@ -1,7 +1,7 @@
 ﻿/*
  * iTXTech SharpFlashDetector
  *
- * Copyright (C) 2020-2021 iTX Technologies
+ * Copyright (C) 2020-2022 iTX Technologies
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -58,7 +58,7 @@ namespace Server
         {
             Console.WriteLine("SharpFlashDetector Server " + Assembly.GetEntryAssembly()?
                 .GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion);
-            Console.WriteLine("Copyright (C) 2020-2021 iTX Technologies\nLicensed under GNU AGPL v3\nhttps://github.com/iTXTech/SharpFlashDetector");
+            Console.WriteLine("Copyright (C) 2020-2022 iTX Technologies\nLicensed under GNU AGPL v3\nhttps://github.com/iTXTech/SharpFlashDetector");
         }
 
         private static void Main(string[] args)
